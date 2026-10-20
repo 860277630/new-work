@@ -1,0 +1,28 @@
+<view class="screen">
+  <view class="title">一张照片，换个合适的底色。</view>
+  <view class="subtitle">自动抠图与裁剪，保留原有面部特征。请使用只有一个人、头顶完整、无遮挡的正面半身照片。</view>
+  <view class="card">
+    <view class="label">01 · 选择照片</view>
+    <view class="muted">照片上传到本服务处理，暂存 24 小时，可主动删除。不会发送给第三方 AI 服务。</view>
+    <button class="secondary" bindtap="choosePhoto" disabled="{{busy}}">{{file ? '更换照片' : '选择或拍摄照片'}}</button>
+    <image class="preview" wx:if="{{file}}" src="{{file.path}}" mode="aspectFit"/>
+  </view>
+  <view class="card">
+    <view class="label">02 · 底色与尺寸</view>
+    <view class="colors"><button class="{{background === 'white' ? 'selected' : ''}}" data-color="white" bindtap="setBackground" disabled="{{busy}}"><text class="color-dot white"/>白底</button><button class="{{background === 'blue' ? 'selected' : ''}}" data-color="blue" bindtap="setBackground" disabled="{{busy}}"><text class="color-dot blue"/>蓝底</button><button class="{{background === 'red' ? 'selected' : ''}}" data-color="red" bindtap="setBackground" disabled="{{busy}}"><text class="color-dot red"/>红底</button></view>
+    <view class="setting-title">照片尺寸</view>
+    <picker range="{{sizes}}" range-key="label" value="{{sizeIndex}}" bindchange="setSize" disabled="{{busy}}"><view class="picker-field">{{sizes[sizeIndex].label}} ↓</view></picker>
+    <view class="dimensions" wx:if="{{sizeIndex === 3}}"><view><view class="muted">宽度（mm）</view><input type="number" value="{{widthMm}}" data-key="widthMm" bindinput="setNumber" disabled="{{busy}}"/></view><view><view class="muted">高度（mm）</view><input type="number" value="{{heightMm}}" data-key="heightMm" bindinput="setNumber" disabled="{{busy}}"/></view></view>
+    <view class="muted">300 DPI · {{pixelWidth}} × {{pixelHeight}} 像素。预设尺寸供选择，具体要求请按用途核对。</view>
+    <view class="setting-title">画面缩放 <text>{{zoom}}%</text></view><slider min="80" max="150" step="5" value="{{zoom}}" data-key="zoom" bindchange="setNumber" disabled="{{busy}}" activeColor="#176b4b"/>
+    <view class="setting-title">水平位置 <text>{{offsetX}}</text></view><slider min="-15" max="15" value="{{offsetX}}" data-key="offsetX" bindchange="setNumber" disabled="{{busy}}" activeColor="#176b4b"/>
+    <view class="setting-title">上下位置 <text>{{offsetY}}</text></view><slider min="-20" max="20" value="{{offsetY}}" data-key="offsetY" bindchange="setNumber" disabled="{{busy}}" activeColor="#176b4b"/>
+    <view class="muted">调整后点击“生成预览”应用。首次自动定位后，可按需要微调人物大小和位置。</view>
+    <view class="setting-title">输出格式</view><picker range="{{formats}}" value="{{formatIndex}}" bindchange="setFormat" disabled="{{busy}}"><view class="picker-field">{{formats[formatIndex]}} ↓</view></picker>
+  </view>
+  <view class="consent" bindtap="toggleConsent"><checkbox checked="{{consent}}" color="#176b4b"/><text>同意上传照片用于证件照制作，文件暂存 24 小时，可主动删除。</text></view>
+  <button class="primary" bindtap="generate" loading="{{busy}}" disabled="{{busy || !file || !consent}}">{{busy ? '正在制作' : '生成预览'}}</button>
+  <view class="muted" wx:if="{{message}}">{{message}}</view><view class="error" wx:if="{{error}}">{{error}}</view>
+  <view class="card" wx:if="{{result}}"><view class="label">{{dirty ? '上一次生成的结果' : '制作完成'}}</view><image class="preview" wx:if="{{resultPath}}" src="{{resultPath}}" mode="aspectFit"/><view class="muted" wx:else>照片已生成；预览下载失败时，可点击下方按钮重试下载并发送。</view><view class="muted">请检查发丝、耳朵、头顶留白和尺寸。抠图效果受光线与背景影响，不保证通过具体用途的审核。</view><button class="primary" bindtap="shareResult" disabled="{{busy}}">下载并发送照片</button></view>
+  <button class="secondary" wx:if="{{hasFiles}}" bindtap="deleteFiles" disabled="{{busy}}">删除本页上传的照片和生成结果</button>
+</view>

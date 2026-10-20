@@ -1,0 +1,15 @@
+.tools/
+build/
+data/
+project.private.config.json
+.env
+.env.*
+!.env.example
+node_modules/
+.idea/
+.vscode/
+*.log
+*.pem
+*.key
+*.p12
+*.pfx

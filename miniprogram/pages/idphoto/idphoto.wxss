@@ -1,0 +1,9 @@
+@import "../convert/convert.wxss";
+.preview { width: 100%; height: 500rpx; background: #edf2ef; border-radius: 18rpx; margin-top: 20rpx; }
+.colors { display: flex; gap: 16rpx; margin-top: 18rpx; }
+.colors button { flex: 1; margin: 0; background: #f1f5f2; color: #18342b; }
+.colors .selected { outline: 3rpx solid #176b4b; }
+.color-dot { display: inline-block; width: 24rpx; height: 24rpx; border-radius: 50%; border: 1rpx solid #ddd; margin-right: 10rpx; }
+.white { background: white; } .blue { background: #438edb; } .red { background: #d5282a; }
+.dimensions { display: flex; gap: 20rpx; }
+.dimensions view { flex: 1; }

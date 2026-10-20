@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#176b4b">
+  <title>格式工坊 · 图片与 PDF 转换</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="/" aria-label="格式工坊首页"><img src="/favicon.svg" width="40" height="40" alt=""><span>格式工坊<small>把文件处理，变简单</small></span></a>
+    <nav aria-label="主导航"><button class="nav active" data-view="workspace" aria-pressed="true">转换工具</button><button class="nav" data-view="history" aria-pressed="false">最近任务 <span id="history-count">0</span></button></nav>
+    <div id="connection" class="connection"><span></span><span id="connection-text">正在连接服务</span></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div><div class="eyebrow">你的轻量文件工具箱</div><h1>让文件，<span>轻装上阵。</span></h1><p>压缩图片、转换格式、整理 PDF。<br>选好文件，剩下的交给我们。</p></div>
+      <div class="hero-art" aria-hidden="true"><div class="art-sheet back"><span>PDF</span><i></i><i></i><i></i></div><div class="art-sheet front"><svg viewBox="0 0 100 76"><rect x="3" y="3" width="94" height="70" rx="8"/><circle cx="72" cy="24" r="8"/><path d="M8 62 34 31 57 55 71 42 93 67"/></svg><span>JPG <b>↔</b> PNG</span></div><div class="art-spark">✦</div></div>
+    </section>
+
+    <section id="workspace-view" aria-label="文件转换">
+      <div class="tools" role="group" aria-label="选择转换工具">
+        <button class="tool active" data-operation="compress" aria-pressed="true"><span class="tool-icon mint">↘</span><span><strong>图片压缩</strong><small>让图片轻一点</small></span><span class="tool-arrow">↗</span></button>
+        <button class="tool" data-operation="convertImage" aria-pressed="false"><span class="tool-icon blue">⇄</span><span><strong>格式转换</strong><small>常用图片格式互转</small></span><span class="tool-arrow">↗</span></button>
+        <button class="tool" data-operation="imagesToPdf" aria-pressed="false"><span class="tool-icon sand">▤</span><span><strong>图片转 PDF</strong><small>多张图片，整齐成册</small></span><span class="tool-arrow">↗</span></button>
+        <button class="tool" data-operation="pdfToImages" aria-pressed="false"><span class="tool-icon lilac">▧</span><span><strong>PDF 转图片</strong><small>逐页转换，打包带走</small></span><span class="tool-arrow">↗</span></button>
+        <a class="tool" href="/idphoto"><span class="tool-icon mint">◎</span><span><strong>证件照制作</strong><small>自动抠图，红白蓝底色</small></span><span class="tool-arrow">↗</span></a>
+      </div>
+
+      <div class="workbench">
+        <section class="upload-panel">
+          <div class="section-heading"><h2 id="tool-title">图片压缩</h2><span id="output-tag" class="tag">输出 JPG</span></div>
+          <p id="tool-description" class="description">调整尺寸与质量，让图片更方便发送和保存。</p>
+          <input id="file-input" type="file" accept=".jpg,.jpeg,.jpe,.jfif,.png,.bmp,.dib,.gif,.tif,.tiff,.heic" hidden>
+          <button id="drop-zone" class="drop-zone" type="button">
+            <span class="upload-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 32V9m-8 8 8-8 8 8M10 30v9h28v-9"/></svg></span>
+            <strong>拖入文件，或点击选择</strong><span id="file-hint">支持 BMP/DIB、JPEG、GIF、TIFF、PNG、HEIC，单文件 ≤ 20MB</span><span class="choose-label">选择文件 <b>＋</b></span>
+          </button>
+          <div id="file-list" class="file-list" aria-label="已选择文件"></div>
+          <p id="order-hint" class="small-note" hidden>按列表顺序生成 PDF，每张图片一页。可用箭头调整顺序。</p>
+          <p id="frame-note" class="small-note">GIF 只处理首帧，TIFF 只处理第一页；转换结果不包含动画或其他页。HEIC 只处理第一张静态图。</p>
+          <div class="file-meta"><span id="file-summary">尚未选择文件</span><button id="clear-files" class="text-button" hidden>清空列表</button></div>
+        </section>
+        <aside class="settings-panel">
+          <h3>转换设置</h3>
+          <div id="format-setting" class="setting" hidden><label for="output-format">输出格式</label><select id="output-format"><option value="jpg">JPEG (*.jpg)</option><option value="png">PNG (*.png)</option><option value="bmp">位图 BMP (*.bmp)</option><option value="dib">位图 DIB (*.dib)</option><option value="gif">GIF (*.gif)</option><option value="tiff">TIFF (*.tiff)</option><option value="heic">HEIC (*.heic)</option></select></div>
+          <div id="bmp-setting" class="setting" hidden><label for="bmp-bits">位图颜色</label><select id="bmp-bits"><option value="24">24 位 · 真彩色</option><option value="1">单色 · 黑白（1 位）</option><option value="4">16 色（4 位）</option><option value="8">256 色（8 位）</option></select><p class="small-note">单色、16 色和 256 色会减少颜色；DIB 输出为不含 BMP 文件头的位图数据。</p></div>
+          <div id="quality-setting" class="setting"><label for="quality">图片质量 <output id="quality-value">75%</output></label><input id="quality" type="range" min="30" max="95" step="5" value="75"><div class="range-caption"><span>更小体积</span><span>更高清晰度</span></div></div>
+          <div id="width-setting" class="setting"><label for="max-width">最大宽度 <span>像素</span></label><input id="max-width" type="number" min="320" max="4000" step="1" value="2400"><p class="small-note">小图片不会放大，支持 320–4000 像素。</p></div>
+          <div id="dpi-setting" class="setting" hidden><label for="dpi">图片清晰度 <span>DPI</span></label><select id="dpi"><option value="72">72 · 轻量预览</option><option value="120" selected>120 · 日常使用</option><option value="180">180 · 更高清晰</option></select><p class="small-note">最多 20 页，清晰度越高，文件通常越大。</p></div>
+          <div id="pdf-setting" class="pdf-setting" hidden><span class="pdf-symbol">A4</span><strong>自动适配 A4 页面</strong><p>图片居中排列，保持原始比例，每张图片独立一页。</p></div>
+          <p id="settings-note" class="small-note">输出为 JPG，透明区域填充白色。转换后体积不保证更小。</p>
+          <label class="consent"><input type="checkbox" id="consent"><span>同意将文件上传至当前服务进行转换，文件暂存 24 小时，可主动删除。</span></label>
+          <button id="start-button" class="primary" disabled><span id="start-label">开始转换</span><span>→</span></button>
+          <div class="cost-note">当前免费使用</div>
+        </aside>
+      </div>
+      <div id="error-message" class="error-message" role="alert" hidden></div>
+      <section id="progress-panel" class="progress-panel" aria-live="polite" hidden><div><strong id="progress-message">准备上传</strong><span id="progress-value">0%</span></div><progress id="progress-bar" max="100" value="0"></progress><p>你可以查看最近任务，转换会在后台继续。</p></section>
+      <section id="result-panel" class="result-panel" aria-live="polite" hidden><div class="success-icon">✓</div><div class="result-description"><h3>转换完成，文件已准备好</h3><p><span id="result-name"></span> <span id="result-size"></span></p><p id="result-comparison"></p></div><div class="result-actions"><button id="download-button" class="primary">下载结果 ↓</button><button id="delete-button" class="text-button">删除原文件和结果</button></div></section>
+    </section>
+
+    <section id="history-view" class="history-view" hidden><div class="section-heading"><h2>最近任务</h2><button id="refresh-history" class="text-button">刷新状态 ↻</button></div><p class="description">文件暂存 24 小时，请及时下载。重启服务后，历史任务可能不可用。</p><div id="history-list"></div></section>
+    <footer><span class="footer-mark">◇</span><div><strong>临时处理，及时清理</strong><p>原文件与转换结果最多暂存 24 小时，你也可以在转换完成后主动删除。</p></div><span class="footer-formats">BMP / DIB · JPEG · GIF · TIFF · PNG · HEIC · PDF</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

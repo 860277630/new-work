@@ -1,0 +1,7 @@
+{
+  "appid": "wx85021ef8fc65df22",
+  "projectname": "wechat-format-factory",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "./",
+  "setting": { "es6": true, "enhance": true, "minified": true, "urlCheck": false }
+}

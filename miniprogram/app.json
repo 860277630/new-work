@@ -1,0 +1,6 @@
+{
+  "pages": ["pages/home/home", "pages/convert/convert", "pages/history/history", "pages/idphoto/idphoto"],
+  "window": { "navigationBarTitleText": "益伴图片格式转换", "navigationBarBackgroundColor": "#f4f8f6", "navigationBarTextStyle": "black", "backgroundColor": "#f4f8f6" },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#176b4b"><title>证件照制作 · 益伴</title><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/idphoto.css"><script src="/assets/idphoto.js" defer></script></head>
+<body><header class="header"><a class="brand" href="/"><img src="/favicon.svg" width="40" height="40" alt=""><span>益伴图片工具<small>返回图片与 PDF 工具</small></span></a><span id="status" class="small-note">正在连接服务</span></header>
+<main><section class="hero"><div><div class="eyebrow">证件照制作</div><h1>一张照片，<span>换个合适的底色。</span></h1><p>上传正面半身照片，自动抠图与裁剪。<br>保留原有面部特征，按尺寸导出。</p></div></section>
+<div class="photo-layout"><section class="photo-card"><h2>选择照片</h2><p class="small-note">仅选择一个人、头顶完整、无遮挡的正面照片。支持 JPG、PNG、HEIC，最多 20MB。</p><input id="photo-file" type="file" accept=".jpg,.jpeg,.png,.heic"><img id="source-preview" class="photo-preview" alt="原照片" hidden><p id="source-name" class="small-note"></p>
+<h2>底色与尺寸</h2><label>底色<select id="background"><option value="white">白底</option><option value="blue">蓝底</option><option value="red">红底</option></select></label>
+<label>尺寸<select id="preset"><option value="25,35">一寸 · 25 × 35 mm</option><option value="35,49">二寸 · 35 × 49 mm</option><option value="33,48">小二寸 · 33 × 48 mm</option><option value="custom">自定义尺寸</option></select></label>
+<div id="custom-size" class="photo-row" hidden><label>宽度（mm）<input id="width" type="number" min="20" max="100" value="25" required></label><label>高度（mm）<input id="height" type="number" min="20" max="120" value="35" required></label></div>
+<p id="dimensions" class="small-note">300 DPI · 295 × 413 像素</p>
+<label>画面缩放 <output id="zoom-value">100%</output><input id="zoom" type="range" min="80" max="150" step="5" value="100"></label>
+<label>水平位置 <output id="x-value">0</output><input id="offset-x" type="range" min="-15" max="15" value="0"></label>
+<label>上下位置 <output id="y-value">0</output><input id="offset-y" type="range" min="-20" max="20" value="0"></label>
+<p class="small-note">修改设置后重新生成预览。尺寸预设供选择，具体要求请按用途核对。</p>
+<label>输出格式<select id="format"><option value="jpg">JPEG (*.jpg)</option><option value="png">PNG (*.png)</option></select></label>
+<label class="photo-consent"><input id="consent" type="checkbox">同意上传照片制作证件照，文件暂存 24 小时，可主动删除。照片不会发送给第三方 AI 服务。</label>
+<button id="generate" class="start-button" disabled>生成预览</button><p id="message" class="small-note" aria-live="polite"></p><p id="error" class="photo-error" role="alert"></p></section>
+<section class="photo-card result-card"><h2 id="result-title">结果预览</h2><div id="empty-result" class="photo-empty">选择照片、底色和尺寸后，点击生成预览。</div><img id="result-preview" class="photo-preview" alt="生成的证件照" hidden><p class="small-note">请检查发丝、耳朵、头顶留白和尺寸。抠图效果受光线与背景影响，不保证通过具体用途的审核。</p><a id="download" class="photo-download" hidden>下载照片</a><button id="retry-download" class="secondary" hidden>重试下载预览</button><button id="delete" class="secondary" hidden>删除本页上传的照片和生成结果</button></section></div></main></body></html>

@@ -1,0 +1,31 @@
+<view class="screen">
+  <view class="title">{{tool.title}}</view>
+  <view class="subtitle">{{tool.description}}</view>
+  <view class="card">
+    <view class="label">01 · 选择文件</view>
+    <view class="muted">{{tool.input === 'pdf' ? '支持 PDF，最多 20 页' : '支持 BMP/DIB、JPEG、GIF、TIFF、PNG、HEIC'}} · 单文件不超过 20MB</view>
+    <view class="muted" wx:if="{{tool.input !== 'pdf'}}">GIF 只处理首帧，TIFF 只处理第一页，结果不包含动画或其他页。HEIC 只处理第一张静态图；JPEG 支持 jpg/jpeg/jpe/jfif，TIFF 支持 tif/tiff。</view>
+    <view class="muted" wx:if="{{tool.input !== 'pdf'}}">聊天中直接发送的照片选“图片”；以文件发送的图片选“图片文件”。</view>
+    <button class="secondary" bindtap="chooseFiles" disabled="{{busy}}">{{files.length ? '重新选择文件' : '选择文件'}}</button>
+    <view wx:for="{{files}}" wx:key="path" class="file-row"><text class="file-name">{{index + 1}}. {{item.name}}</text><text class="muted">{{item.sizeLabel}}</text></view>
+  </view>
+  <view class="card" wx:if="{{tool.id !== 'imagesToPdf'}}">
+    <view class="label">02 · 转换设置</view>
+    <view wx:if="{{tool.id === 'convertImage' || tool.id === 'pdfToImages'}}"><view class="setting-title">输出格式</view><picker range="{{formats}}" range-key="label" value="{{formatIndex}}" bindchange="selectFormat" disabled="{{busy}}"><view class="picker-field">{{formats[formatIndex].label}} ↓</view></picker></view>
+    <view wx:if="{{tool.id === 'convertImage' && (format === 'bmp' || format === 'dib')}}"><view class="setting-title">位图颜色</view><picker range="{{bmpLabels}}" value="{{bmpIndex}}" bindchange="selectBmp" disabled="{{busy}}"><view class="picker-field">{{bmpLabels[bmpIndex]}} ↓</view></picker><view class="muted">单色、16 色、256 色会减少颜色；DIB 输出不包含 BMP 文件头。</view></view>
+    <view wx:if="{{tool.id === 'compress' || format === 'jpg' || format === 'heic'}}">
+      <view class="setting-title">图片质量 <text>{{quality}}%</text></view>
+      <slider min="30" max="95" step="5" value="{{quality}}" activeColor="#176b4b" bindchange="qualityChange" disabled="{{busy}}"/>
+    </view>
+    <view wx:if="{{tool.id === 'compress'}}"><view class="setting-title">最大宽度</view><input type="number" value="{{maxWidth}}" bindinput="widthChange" disabled="{{busy}}"/><view class="muted">320–4000 像素，小图片不会放大。压缩后体积不保证更小。</view></view>
+    <view wx:if="{{tool.id === 'pdfToImages'}}"><view class="setting-title">图片清晰度</view><input type="number" value="{{dpi}}" bindinput="dpiChange" disabled="{{busy}}"/><view class="muted">72–180 DPI，数值越大，文件通常越大。</view></view>
+    <view class="muted" wx:if="{{tool.id === 'convertImage' && (format === 'jpg' || format === 'bmp' || format === 'dib' || format === 'heic')}}">透明区域会填充为白色。HEIC、TIFF、DIB 可下载后发送文件，微信内可能无法直接预览。</view>
+    <view class="muted" wx:if="{{tool.id === 'convertImage' && format === 'gif'}}">输出静态 GIF，最多 256 色，半透明效果可能损失。</view>
+  </view>
+  <view class="consent" bindtap="toggleConsent"><checkbox checked="{{consent}}" color="#176b4b"/><text>同意将文件上传至云端进行转换，文件暂存 24 小时，可主动删除。</text></view>
+  <button class="primary" bindtap="start" loading="{{busy}}" disabled="{{busy || !files.length || !consent}}">{{busy ? '正在处理' : '开始转换'}}</button>
+  <view class="progress-card" wx:if="{{busy}}"><progress percent="{{progress}}" activeColor="#176b4b" stroke-width="4"/><view class="muted">{{message}}</view></view>
+  <view class="error" wx:if="{{error}}">{{error}}</view>
+  <view class="card result" wx:if="{{result}}"><view class="label">转换完成</view><view>{{result.name}}</view><view class="muted">{{result.sizeLabel}} · 请在 24 小时内保存</view><button class="primary" bindtap="openResult">{{tool.id === 'pdfToImages' ? '下载并发送 ZIP 文件' : '查看结果'}}</button><button class="secondary" bindtap="shareResult">发送给微信好友</button><view class="delete-link" bindtap="deleteFiles">删除云端原文件和结果</view></view>
+  <view class="muted" wx:if="{{!busy && !result && message}}">{{message}}</view>
+</view>

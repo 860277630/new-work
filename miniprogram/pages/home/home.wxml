@@ -1,0 +1,20 @@
+<view class="screen">
+  <view class="eyebrow">文件处理 · 简单一点</view>
+  <view class="hero">
+    <view class="title">把文件变成<text class="accent">你需要的样子。</text></view>
+    <view class="subtitle"><view>图片压缩、格式转换、PDF 处理。</view><view>选好文件，剩下的交给我们。</view></view>
+    <view class="hero-tags"><text>多种图片格式</text><text>PDF</text><text>单文件 ≤ 20MB</text></view>
+  </view>
+  <view class="section-heading"><text>选择一个工具</text><text class="history-link" bindtap="openHistory">最近任务 →</text></view>
+  <view class="tool-grid">
+    <view class="tool-card {{item.color}}" wx:for="{{tools}}" wx:key="id" data-id="{{item.id}}" bindtap="openTool">
+      <view class="tool-number">{{item.badge}}<text class="tool-arrow">↗</text></view>
+      <view class="tool-title">{{item.title}}</view>
+      <view class="tool-description">{{item.description}}</view>
+    </view>
+  </view>
+  <view class="card privacy">
+    <view class="label">临时处理，及时清理</view>
+    <view class="muted">文件会上传至云端进行转换，暂存 24 小时。你也可以在任务完成后主动删除。</view>
+  </view>
+</view>

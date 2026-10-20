@@ -1,0 +1,1 @@
+button[size=mini] { background: transparent; color: #708178; font-size: 23rpx; margin-top: 18rpx; padding: 0; }

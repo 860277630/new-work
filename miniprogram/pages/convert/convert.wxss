@@ -1,0 +1,13 @@
+.file-row { display: flex; justify-content: space-between; align-items: center; gap: 16rpx; padding-top: 20rpx; }
+.file-name { font-size: 25rpx; max-width: 430rpx; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.formats { display: flex; gap: 20rpx; }
+.formats button { flex: 1; background: #f1f5f2; color: #64776b; }
+.formats .selected { background: #176b4b; color: white; }
+.setting-title { margin-top: 24rpx; font-size: 26rpx; display: flex; justify-content: space-between; }
+input { background: #f4f8f6; border-radius: 12rpx; padding: 16rpx; margin: 14rpx 0; height: 48rpx; font-size: 28rpx; }
+.consent { display: flex; align-items: flex-start; font-size: 23rpx; line-height: 1.7; color: #708178; margin-top: 28rpx; }
+.consent checkbox { transform: scale(.75); flex-shrink: 0; margin-left: -8rpx; }
+.progress-card { padding: 26rpx 0; }
+.progress-card .muted { margin-top: 16rpx; }
+.delete-link { color: #708178; font-size: 24rpx; text-align: center; margin-top: 28rpx; }
+.picker-field { border: 1rpx solid #dfe7e0; border-radius: 16rpx; padding: 24rpx; margin-bottom: 18rpx; background: #f5f8f5; }
