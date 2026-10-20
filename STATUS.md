@@ -43,9 +43,19 @@ cd D:\project\wechat-format-factory
 
 - 证件照页面在微信开发者工具中的实际编译，以及手机上的相册/拍摄、聊天附件、结果发送和返回最近任务，需要继续实测。Node 检查不能替代微信真机验证。
 - `miniprogram/config.js` 当前仍指向 `http://192.168.0.2:8088`，真机调试前确认电脑实际 IP、同一局域网和端口可访问性。
-- Linux/Docker 推理尚未实机验证；Docker 需挂载本地模型目录，详见 README.md。
+- Ubuntu 24.04 x86_64 服务器上的直接 Java 部署已于 2026-10-20 实测通过，包括真实证件照和 HEIC；Docker 容器部署仍未实测。
 - 正式部署、HTTPS/微信登录配置、持久化存储及广告变现不属于本次证件照收尾，仍按 README.md 中的现有限制处理。
 
 本目录使用 Git 管理，远程仓库为 https://github.com/860277630/new-work.git。后续接续工作先读本文件并核对代码和测试报告。
 
 另一台电脑克隆仓库后，在 Codex 中打开克隆的项目目录，先阅读 STATUS.md 和 README.md。`.tools/`、`build/` 和 `data/` 不随 Git 同步；依赖、HEIC 工具和证件照模型按 README.md 重新配置。换电脑开始开发前拉取更新，结束时提交并推送。
+
+## 服务器部署准备（2026-10-20）
+
+- 腾讯云上海服务器 `110.40.207.112`：Ubuntu 24.04 x86_64、4 核、约 4GB 内存。
+- 已安装 Java 17、Nginx、libheif 与 x265 插件、Node.js，部署代码版本 `b38825c` 及本地模型/运行库。
+- 发布目录 `/opt/format-factory/releases/b38825c-eF588nFB`，当前链接 `/opt/format-factory/current`；测试输出见发布目录中的 `build-deploy.log`。
+- 完整构建测试、额外 169 次含 HEIC 的交叉转换、三种底色与 DPI/尺寸、无人脸/多人脸拒绝、HTTP 和监控测试通过；回环地址实际服务健康检查也通过。
+- Nginx 正在运行，`http://110.40.207.112/` 为待配置页面，`/healthz` 返回 `setup-required`。仅代表部署准备完成，不是正式服务已上线。
+- `format-factory.service` 已配置，使用独立服务账号、回环绑定及内存限制，目前未启用。私密配置在 `/etc/format-factory/backend.env`，AppSecret 尚未填写，配置内容不提交 Git。
+- 下一步：购买并配置域名、办理所需备案、HTTPS、服务器私密微信配置、小程序合法域名与隐私授权、真机验证；公开运营前还需补齐持久化与限流等现有限制。操作说明见 `deploy/README.md`。
