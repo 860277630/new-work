@@ -67,5 +67,5 @@ cd D:\project\wechat-format-factory
 - Nginx 已配置 TLS 1.2/1.3、HTTP 308 跳转和待配置页面；两个域名在服务器上的证书校验及 `/healthz` 检查通过，仍返回 `setup-required`。
 - `certbot.timer` 已启用并运行，`certbot renew --dry-run` 模拟续期通过；续期后自动校验并重载 Nginx。
 - 私钥仅保存在服务器 `/etc/letsencrypt/`，不提交 Git。可复用脚本见 `deploy/configure-https.sh`。
-- 首次外部 HTTPS 检查未打通，已请用户检查腾讯云轻量防火墙 TCP 443；需在放行后重新验证公网访问，不能将服务器内验证当成公网可用。
+- 用户已放通腾讯云轻量防火墙 TCP 443，随后从外部使用完整证书校验验证两个域名：HTTPS `/healthz` 均返回 200 / `setup-required`，`api` 域名的 `/api/session` 返回 503，业务接口保持待配置状态。此前公网 HTTPS 不通的问题已解除。
 - 域名实名与 DNS 配置不代表已完成 ICP 备案。正式后端仍未启用；后续需要 ICP/小程序备案、私密微信配置、正式代理、合法域名和真机验证。
