@@ -58,4 +58,14 @@ cd D:\project\wechat-format-factory
 - 完整构建测试、额外 169 次含 HEIC 的交叉转换、三种底色与 DPI/尺寸、无人脸/多人脸拒绝、HTTP 和监控测试通过；回环地址实际服务健康检查也通过。
 - Nginx 正在运行，`http://110.40.207.112/` 为待配置页面，`/healthz` 返回 `setup-required`。仅代表部署准备完成，不是正式服务已上线。
 - `format-factory.service` 已配置，使用独立服务账号、回环绑定及内存限制，目前未启用。私密配置在 `/etc/format-factory/backend.env`，AppSecret 尚未填写，配置内容不提交 Git。
-- 下一步：购买并配置域名、办理所需备案、HTTPS、服务器私密微信配置、小程序合法域名与隐私授权、真机验证；公开运营前还需补齐持久化与限流等现有限制。操作说明见 `deploy/README.md`。
+- 域名与 HTTPS 的最新进度见下节。后续仍需所需备案、服务器私密微信配置、小程序合法域名与隐私授权、真机验证；公开运营前还需补齐持久化与限流等现有限制。操作说明见 `deploy/README.md`。
+
+## 域名与 HTTPS（2026-10-20）
+
+- 已确定域名 `magicboxhub.space`，`@` 与 `api` 两条 A 记录指向 `110.40.207.112`，已在服务器上验证解析。
+- 已签发同时覆盖 `magicboxhub.space` 和 `api.magicboxhub.space` 的 Let's Encrypt 证书，到期日期为 2027-01-18。
+- Nginx 已配置 TLS 1.2/1.3、HTTP 308 跳转和待配置页面；两个域名在服务器上的证书校验及 `/healthz` 检查通过，仍返回 `setup-required`。
+- `certbot.timer` 已启用并运行，`certbot renew --dry-run` 模拟续期通过；续期后自动校验并重载 Nginx。
+- 私钥仅保存在服务器 `/etc/letsencrypt/`，不提交 Git。可复用脚本见 `deploy/configure-https.sh`。
+- 首次外部 HTTPS 检查未打通，已请用户检查腾讯云轻量防火墙 TCP 443；需在放行后重新验证公网访问，不能将服务器内验证当成公网可用。
+- 域名实名与 DNS 配置不代表已完成 ICP 备案。正式后端仍未启用；后续需要 ICP/小程序备案、私密微信配置、正式代理、合法域名和真机验证。

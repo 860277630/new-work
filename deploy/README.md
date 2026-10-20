@@ -54,3 +54,27 @@ curl --fail http://127.0.0.1:8088/api/health
 ```
 
 初始公网 `/healthz` 返回 `setup-required`，表示服务器等待正式配置；它不代表后端已公开可用。当前脚本不自动配置域名、证书或云厂商防火墙，不修改 SSH 登录方式和账号密码。
+
+## 给待配置页面启用 HTTPS
+
+在域名及 API 子域名的 A 记录都指向服务器后，可单独上传 `configure-https.sh`，执行：
+
+```bash
+sudo bash configure-https.sh magicboxhub.space api.magicboxhub.space 110.40.207.112
+```
+
+脚本只处理 Nginx 待配置页面，安装 Certbot，通过 HTTP-01 验证申请同时覆盖两个域名的证书，配置 HTTP 跳转 HTTPS、TLS 1.2/1.3 和系统自动续期。运行前备份 Nginx 站点文件，配置校验失败时恢复备份；不会启用正式后端，也不会修改服务器登录方式。已启用正式后端时拒绝覆盖配置。
+
+默认不填写 ACME 联系邮箱；如需使用自己的联系邮箱，可作为第四个参数提供。证书私钥和 ACME 账户数据位于服务器的 `/etc/letsencrypt/`，不能提交 Git。域名和子域名保持解析、TCP 80/443 可访问，是 HTTP 验证和后续使用的前提。若接入商因备案状态限制 HTTP 访问，应按其指引完成备案或使用正规的 DNS 验证流程。
+
+腾讯云轻量服务器还需在实例的“防火墙”页签放通公网 TCP 443（HTTPS）；服务器本机 Nginx 正在监听并不代表云防火墙已放行。公网 IPv4 服务的规则可设为来源 `0.0.0.0/0`、TCP、443、允许。保留用于证书验证的 TCP 80，Java 的 8088 继续只监听回环地址。
+
+常用证书检查：
+
+```bash
+sudo certbot certificates
+sudo certbot renew --dry-run
+sudo systemctl status certbot.timer --no-pager
+```
+
+HTTPS 配置成功不等于网站或小程序已经备案，也不等于工具接口已对外开放。正式域名加入微信后台、AppSecret 填写、用户隐私授权及真机验证仍需按上文继续完成。
